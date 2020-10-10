@@ -42,8 +42,7 @@ public class Calendario extends GregorianCalendar{
      * @return the value saved in the DAY_OF_MONTH field
      */
     public int getDayOfMonth(){
-        //utile
-        System.out.println("Utilissimo!");
+   
          return super.get(GregorianCalendar.DAY_OF_MONTH);
     }
     
