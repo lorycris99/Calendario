@@ -37,6 +37,8 @@ public class Calendario extends GregorianCalendar{
     
     }
     
+    //methods
+    
     /**
      * Returns the day of the given Calendario
      * @return the value saved in the DAY_OF_MONTH field
@@ -75,63 +77,55 @@ public class Calendario extends GregorianCalendar{
     }
     
     /**
-     * Used to easily convert the Calendario date in the format YYYY-MM-DD, usable by SQL
+     * Used to easily convert the Calendario date in the format YYYY-MM-DD, usable by SQL, JS, etc.
      * @return The date in the format YYYY-MM-DD
      */
-    public String formatSQLDateString(){
+    public String formatDateString(){
     
         return getYear() + "-" + getMonth() + "-" + getDayOfMonth();
     }
     
     //da finire
-    public String formatJSString(){
+    private String formatJSString(){
     
         return "";
     }
     
     
     /**
-     * This static method gives the possibility to construct a Calendario from an SQL formatted string (YYY-MM-DD)
-     * @param dateSQL the date in the format YYYY-MM-DD
+     * This static method gives the possibility to construct a Calendario from a formatted string (YYYY-MM-DD)
+     * @param date the date in the format YYYY-MM-DD
      * @return the Calendario with the date specified in the string
+     * 
+     * @throws NumberFormatException if the given doesn't match the right pattern
      */
-    public static Calendario parseSQLString(String dateSQL){//YYYY-MM-DD
+    public static Calendario parseDateString(String date){//YYYY-MM-DD
     
         int year, month, day;
         Calendario temp = null;
         
-        try {
-           
-            if(dateSQL.length() != 10){
+        
             
-                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
-            }
-            
-            if(!Character.isDigit(dateSQL.charAt(0))){
-            
-                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
-            }
-            
-            year = Integer.parseUnsignedInt(dateSQL.substring(0, 4));
-            if(!dateSQL.substring(4,5).equals("-")){
+        if(date.matches("\\d{4}-\\d{2}-\\d{2}")){
+
+            try {
                 
+                year = Integer.parseUnsignedInt(date.substring(0, 4));
+                month = Integer.parseUnsignedInt(date.substring(5, 7));
+                day = Integer.parseUnsignedInt(date.substring(8));
+
+                temp = new Calendario(year, month, day);
+
+            } catch (NumberFormatException e) {
+            
                 throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
             }
             
-            month = Integer.parseUnsignedInt(dateSQL.substring(5, 7));
-            if(!dateSQL.substring(7,8).equals("-")){
-                
-                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
-            }
-            day = Integer.parseUnsignedInt(dateSQL.substring(8));
-            
-            temp = new Calendario(year, month, day);
-            
-        } catch (NumberFormatException e) {
-            
+        }else{
+
             throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
         }
-        
+   
         return temp;
     }
     
@@ -152,6 +146,8 @@ public class Calendario extends GregorianCalendar{
         
         return false;
     }
+    
+    //variables
     
     public static final long serialVersionUID = 123L;
 }
