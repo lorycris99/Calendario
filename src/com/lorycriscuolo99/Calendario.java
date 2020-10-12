@@ -81,8 +81,38 @@ public class Calendario extends GregorianCalendar{
      * @return The date in the format YYYY-MM-DD
      */
     public String formatDateString(){
+        
+        String year, month, day;
+        
+        if(getYear() < 1000){
+        
+            year = "0" + getYear();
+        
+        }else{
+            
+            year = "" + getYear();
+        }
+        
+        if(getMonth() < 10 ){
+        
+            month = "0" + getMonth();
+        
+        }else{
+        
+            month = "" + getMonth();
+        }
+        
+        if(getDayOfMonth() < 10){
+        
+            day = "0" + getDayOfMonth();
+            
+        }else{
+        
+            day = "" + getDayOfMonth();
+            
+        }
     
-        return getYear() + "-" + getMonth() + "-" + getDayOfMonth();
+        return year + "-" + month + "-" + day;
     }
     
     //da finire
