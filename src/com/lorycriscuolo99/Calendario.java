@@ -17,9 +17,9 @@ public class Calendario extends GregorianCalendar{
     
     //constructors
     /**
-     * Construct a Calendario object with the same parameters of GregorianCalendar
+     * Construct a Calendario object with the given parameters
      * @param year The value to set the YEAR field 
-     * @param month The value to set th MONTH field, but it starts from 1, so January is 1
+     * @param month The value to set the MONTH field. It starts from 1, so January is 1
      * @param dayOfMonth The value to set the DAY_OF_MONTH field
      */
     public Calendario(int year, int month, int dayOfMonth){
@@ -27,6 +27,20 @@ public class Calendario extends GregorianCalendar{
         super(year, month -1, dayOfMonth);
 //        this.date = new GregorianCalendar(year, month, dayOfMonth);
         
+    }
+    
+    /**
+     * Constructs a Calendario object with the given parameters
+     * @param year The value to set the YEAR field
+     * @param month The value to set the MONTH field. It starts from 1 so January is 1
+     * @param dayOfMonth The value to set the DAY_OF_MONTH field.
+     * @param hour The value to set the HOUR_OF_DAY field. It is the 24h format
+     * @param minute The value to set the MINUTE field
+     * @param second The value to set the SECOND field
+     */
+    public Calendario(int year, int month, int dayOfMonth, int hour, int minute, int second){
+    
+        super(year, month - 1, dayOfMonth, hour, minute, second);
     }
     
     /**
@@ -40,7 +54,7 @@ public class Calendario extends GregorianCalendar{
     //methods
     
     /**
-     * Returns the day of the given Calendario
+     * Returns the day saved in the given Calendario
      * @return the value saved in the DAY_OF_MONTH field
      */
     public int getDayOfMonth(){
@@ -49,7 +63,7 @@ public class Calendario extends GregorianCalendar{
     }
     
     /**
-     * Returns the month of the given Calendario
+     * Returns the month saved in the given Calendario
      * @return the value saved in the MONTH field
      */
     public int getMonth(){
@@ -58,12 +72,39 @@ public class Calendario extends GregorianCalendar{
     }
     
     /**
-     * Returns the year of the given Calendario
+     * Returns the year saved in the given Calendario
      * @return the value saved in the YEAR field
      */
     public int getYear(){
     
         return super.get(GregorianCalendar.YEAR);
+    }
+    
+    /**
+     * Returns the hour saved in the given Calendario in the 24h format
+     * @return the value saved in the HOUR_OF_DAY field
+     */
+    public int getHour(){
+    
+        return super.get(GregorianCalendar.HOUR_OF_DAY);
+    }
+    
+    /**
+     * Returns the minute saved in the given Calendario
+     * @return the value saved in the MINUTE field
+     */
+    public int getMinute(){
+    
+        return super.get(GregorianCalendar.MINUTE);
+    }
+    
+    /**
+     * Rteurns the second saved in the given Calendario
+     * @return the value saved in the SECOND field
+     */
+    public int getSecond(){
+    
+        return super.get(GregorianCalendar.SECOND);
     }
     
     /**
@@ -74,6 +115,16 @@ public class Calendario extends GregorianCalendar{
     public String getDateString(){
     
         return "Year: " + getYear() + " Month: " + getMonth() + " Day: " + getDayOfMonth();
+    }
+    
+    /**
+     * Gives a formatted String containing only the main date and time informations
+     * Is like a toString()
+     * @return a string containing year, month, dayOfMonth, hour, minute, second
+     */
+    public String getDateTimeString(){
+    
+        return getDateString() + " Hour:" + getHour() + " Minute: " + getMinute() + " Second: " + getSecond();
     }
     
     /**
@@ -115,10 +166,68 @@ public class Calendario extends GregorianCalendar{
         return year + "-" + month + "-" + day;
     }
     
-    //da finire
-    private String formatJSString(){
+    /**
+     * 
+     * @return 
+     */
+    public String formatDateTimeString(){
     
-        return "";
+        String hour, minute, second;
+        
+        if(getHour() < 10){
+        
+            hour = "0" + getHour();
+        
+        }else{
+        
+            hour = "" + getHour();
+        }
+        
+        if(getMinute() < 10){
+        
+            minute = "0" + getMinute();
+        
+        }else{
+        
+            minute = "" + getMinute();
+        }
+        
+        if(getSecond() < 10){
+        
+            second = "0" + getSecond();
+            
+        }else{
+        
+            second = "" + getSecond();
+        }
+        
+        return formatDateString() + " " + hour + ":" + minute + ":" + second;
+    }
+    
+    //da finire
+    public static Calendario parseDateTimeString(String dateTime){//YYYY-MM-DD HH:MM:SS
+    
+        int year, month, day, hour, minute, second;
+        if(dateTime.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")){
+        
+            try{
+                
+                year = Integer.parseUnsignedInt(dateTime.substring(0, 4));
+                month = Integer.parseUnsignedInt(dateTime.substring(5, 7));
+                day = Integer.parseUnsignedInt(dateTime.substring(8, 10));
+                hour = Integer.parseUnsignedInt(dateTime.substring(11, 13));
+                minute = Integer.parseUnsignedInt(dateTime.substring(14, 16));
+                second = Integer.parseUnsignedInt(dateTime.substring(17));
+                
+                return new Calendario(year, month, day, hour, minute, second);
+            
+            }catch(NumberFormatException e){
+            
+                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD HH:MM:SS format");
+            }
+        }
+        
+        return null;    
     }
     
     
@@ -169,12 +278,7 @@ public class Calendario extends GregorianCalendar{
      */
     public boolean between(GregorianCalendar earlier, GregorianCalendar later){
     
-        if(earlier.before(this) && later.after(this)){
-        
-            return true;
-        }
-        
-        return false;
+        return earlier.before(this) && later.after(this);
     }
     
     //variables
