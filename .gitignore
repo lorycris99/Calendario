@@ -1,5 +1,5 @@
 
 src/com/lorycriscuolo99/Tester.java
 build/classes/com/lorycriscuolo99/Tester.class
-*.class
+build/classes/com/lorycriscuolo99/
 *.class

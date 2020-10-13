@@ -134,7 +134,7 @@ public class Calendario extends GregorianCalendar{
     public String formatDateString(){
         
         String year, month, day;
-        
+        //aggiungo zeri altrimenti non viene rispettato il formato
         if(getYear() < 1000){
         
             year = "0" + getYear();
@@ -167,13 +167,13 @@ public class Calendario extends GregorianCalendar{
     }
     
     /**
-     * 
-     * @return 
+     * Returns a formatted string containing the date and time stored in the Calendario object in the format YYYY-MM-DD HH:MM:SS
+     * @return Returns a formatted string in the format YYYY-MM-DD HH:MM:SS
      */
     public String formatDateTimeString(){
     
         String hour, minute, second;
-        
+        //aggiunge gli zeri altrimenti non viene rispettato il formato
         if(getHour() < 10){
         
             hour = "0" + getHour();
@@ -204,48 +204,19 @@ public class Calendario extends GregorianCalendar{
         return formatDateString() + " " + hour + ":" + minute + ":" + second;
     }
     
-    //da finire
-    public static Calendario parseDateTimeString(String dateTime){//YYYY-MM-DD HH:MM:SS
-    
-        int year, month, day, hour, minute, second;
-        if(dateTime.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")){
-        
-            try{
-                
-                year = Integer.parseUnsignedInt(dateTime.substring(0, 4));
-                month = Integer.parseUnsignedInt(dateTime.substring(5, 7));
-                day = Integer.parseUnsignedInt(dateTime.substring(8, 10));
-                hour = Integer.parseUnsignedInt(dateTime.substring(11, 13));
-                minute = Integer.parseUnsignedInt(dateTime.substring(14, 16));
-                second = Integer.parseUnsignedInt(dateTime.substring(17));
-                
-                return new Calendario(year, month, day, hour, minute, second);
-            
-            }catch(NumberFormatException e){
-            
-                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD HH:MM:SS format");
-            }
-        }
-        
-        return null;    
-    }
-    
-    
     /**
-     * This static method gives the possibility to construct a Calendario from a formatted string (YYYY-MM-DD)
-     * @param date the date in the format YYYY-MM-DD
-     * @return the Calendario with the date specified in the string
+     * This static method gives the possibility to construct a Calendario from a formatted string YYYY-MM-DD or YYYY-MM-DD HH:MM:SS
+     * @param date The date in the format YYYY-MM-DD or YYYY-MM-DD HH:MM:SS
+     * @return The Calendario with the date specified in the string
      * 
      * @throws NumberFormatException if the given doesn't match the right pattern
      */
-    public static Calendario parseDateString(String date){//YYYY-MM-DD
+    public static Calendario parseString(String date){
     
-        int year, month, day;
-        Calendario temp = null;
-        
-        
+        int year, month, day, hour, minute, second;
+        Calendario temp = null;  
             
-        if(date.matches("\\d{4}-\\d{2}-\\d{2}")){
+        if(date.matches("\\d{4}-\\d{2}-\\d{2}")){//YYYY-MM-DD
 
             try {
                 
@@ -255,14 +226,31 @@ public class Calendario extends GregorianCalendar{
 
                 temp = new Calendario(year, month, day);
 
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {//in teoria non dovrebbe essere raggiungibile
             
                 throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
             }
             
-        }else{
-
-            throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD format");
+        }else if(date.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}")){ //YYYY-MM-DD HH:MM:SS
+        
+            try{
+                
+                year = Integer.parseUnsignedInt(date.substring(0, 4));
+                month = Integer.parseUnsignedInt(date.substring(5, 7));
+                day = Integer.parseUnsignedInt(date.substring(8, 10));
+                hour = Integer.parseUnsignedInt(date.substring(11, 13));
+                minute = Integer.parseUnsignedInt(date.substring(14, 16));
+                second = Integer.parseUnsignedInt(date.substring(17));
+                
+                return new Calendario(year, month, day, hour, minute, second);
+            
+            }catch(NumberFormatException e){//in teoria non dovrebbe essere raggiungibile
+            
+                throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD HH:MM:SS format");
+            }
+        }else{ //non matcha niente
+        
+            throw new NumberFormatException("Check the passed string, ensure is in the YYYY-MM-DD HH:MM:SS format or in the YYYY-MM-DD format");
         }
    
         return temp;
