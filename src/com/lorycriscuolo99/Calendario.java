@@ -269,6 +269,28 @@ public class Calendario extends GregorianCalendar{
         return earlier.before(this) && later.after(this);
     }
     
+    
+    /**
+     * The methods evalutate if two Calendario classes overlaps other two generic GregorianCalendar classes. This is useful if the Calendario classes
+     * represents a booking and you need to check if overlaps other bookings
+     * @param actualEarlier Is the earlier Calendario you need to check if overlaps other dates
+     * @param actualLater Is the later Calendario you need to check if overlaps other dates
+     * @param earlier Is the earlier GregorianCalendar
+     * @param later Is the later GregorianCalendar
+     * @return True if the two Calendario classes overlaps the GregorianCalendar classes. False otherwise
+     */
+    public static boolean overlaps(Calendario actualEarlier, Calendario actualLater, GregorianCalendar earlier, GregorianCalendar later){
+    
+        
+        boolean calendarioCompreso = actualEarlier.between(earlier, later) && actualLater.between(earlier, later);
+        boolean calendarioLaterCompreso = actualEarlier.before(earlier) && actualLater.between(earlier, later);
+        boolean calendarioEarlierCompreso = actualEarlier.between(earlier, later) && actualLater.after(later);
+        boolean calendarioInclude = actualEarlier.before(earlier) && actualLater.after(later);
+        boolean calendarioEquals = (actualEarlier.equals(earlier) && actualLater.equals(later)) || (actualEarlier.equals(earlier) && !actualLater.equals(later)) || (!actualEarlier.equals(earlier) && actualLater.equals(later));
+        
+        return calendarioCompreso || calendarioEarlierCompreso || calendarioLaterCompreso || calendarioEquals || calendarioLaterCompreso || calendarioInclude;
+    }
+    
     //variables
     
     public static final long serialVersionUID = 123L;
